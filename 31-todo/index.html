@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>ToDo</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+
+<h1 id="title">Todo Tracker</h1>
+
+<form>
+  <input type="text" id="user-todo" placeholder="New Todo" required>
+</form>
+
+<h2 id="todo-header">Todos</h2>
+<ul></ul>
+
+<button id="clear">Clear All</button>
+
+
+<script>
+(function(window, document) {
+
+  const form     = document.querySelector('form');
+  const todoList = document.querySelector('ul');
+  const button   = document.querySelector('button');
+  const input    = document.getElementById('user-todo');
+
+  const todos = JSON.parse(localStorage.getItem('todos'));
+  let todosArray = todos || [];
+
+  form.addEventListener('submit', e => {
+    e.preventDefault();
+
+    todosArray.push(input.value);
+    localStorage.setItem('todos', JSON.stringify(todosArray));
+
+    todoMaker(input.value);
+    input.value = '';
+  });
+
+  function todoMaker(text) {
+    let todo = document.createElement('li');
+    todo.textContent = text;
+    todoList.appendChild(todo);
+  }
+
+  todos && todos.forEach(todo => todoMaker(todo));
+
+  button.addEventListener('click', () => {
+    localStorage.clear();
+
+    while (todoList.firstChild) {
+      todoList.removeChild(todoList.firstChild);
+    }
+  });  
+
+})(window, document);
+</script>
+
+
+
+</body>
+</html>
